@@ -9,10 +9,10 @@ CORS(app)
 # -----------------------------
 # Load model and scaler
 # -----------------------------
-with open("model/best_house_price_model.pkl", "rb") as f:
+with open("models/best_house_price_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-with open("model/scaler.pkl", "rb") as f:
+with open("models/scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
 # -----------------------------
