@@ -3,8 +3,6 @@ from flask_cors import CORS
 import pickle
 import numpy as np
 
-from auth import login_user   # ✅ USE auth.py
-
 app = Flask(__name__)
 CORS(app)
 
@@ -15,28 +13,18 @@ with open("models/best_house_price_model.pkl", "rb") as f:
 with open("models/scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
-
-# ---------------- LOGIN ----------------
+# ---------------- LOGIN (NO JWT) ----------------
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
-
     email = data.get("email")
     password = data.get("password")
 
-    token = login_user(email, password)
+    # Demo credentials
+    if email == "admin@example.com" and password == "admin123":
+        return jsonify({"success": True})
 
-    if token:
-        return jsonify({
-            "success": True,
-            "token": token
-        }), 200
-
-    return jsonify({
-        "success": False,
-        "message": "Invalid credentials"
-    }), 401
-
+    return jsonify({"success": False, "message": "Invalid credentials"}), 401
 
 # ---------------- PREDICT ----------------
 @app.route("/predict", methods=["POST"])
@@ -44,31 +32,49 @@ def predict():
     try:
         data = request.json
 
-        def yes_no(value):
-            return 1 if value == "Yes" else 0
+        # Convert Yes/No to 1/0
+        def yes_no(val):
+            return 1 if val == "Yes" else 0
 
+        # Map categorical grades/conditions to numbers
+        grade_map = {
+            "Very Poor": 0,
+            "Poor": 1,
+            "Average": 2,
+            "Good": 3,
+            "Very Good": 4,
+            "Excellent": 5
+        }
+
+        condition_map = {
+            "Poor": 0,
+            "Fair": 1,
+            "Good": 2,
+            "Very Good": 3,
+            "Excellent": 4
+        }
+
+        # Build features array (10 features)
         features = [
-            float(data["area"]),
-            int(data["bedrooms"]),
-            int(data["bathrooms"]),
-            int(data["stories"]),
-            yes_no(data["mainroad"]),
-            yes_no(data["guestroom"]),
-            yes_no(data["basement"]),
-            yes_no(data["hotwaterheating"]),
-            yes_no(data["airconditioning"]),
-            int(data["parking"]),
-            yes_no(data["prefarea"]),
+            float(data["area"]),               # Living area
+            int(data["bedrooms"]),             # Bedrooms
+            int(data["bathrooms"]),            # Bathrooms
+            int(data["floors"]),               # Floors
+            int(data["year_built"]),           # Year built
+            int(data["parking"]),              # Parking
+            yes_no(data["waterfront"]),        # Waterfront
+            yes_no(data["renovated"]),         # Renovated
+            grade_map[data["grade"]],          # Grade
+            condition_map[data["condition"]],  # Condition
         ]
 
-        features_array = np.array(features).reshape(1, -1)
+        features = np.array(features).reshape(1, -1)
 
-        scaled_features = scaler.transform(features_array)
-        prediction = model.predict(scaled_features)[0]
+        # Scale and predict
+        scaled_features = scaler.transform(features)
+        price = model.predict(scaled_features)[0]
 
-        return jsonify({
-            "prediction": round(float(prediction), 2)
-        })
+        return jsonify({"predicted_price": round(float(price), 2)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

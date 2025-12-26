@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getToken } from "../auth";
 import "../styles/Predict.css";
+
 function Predict({ onBack }) {
   const [formData, setFormData] = useState({
     area: 1200,
     bedrooms: 3,
     bathrooms: 2,
     floors: 1,
-    yearBuilt: 2010,
+    year_built: 2010,
     parking: 1,
     grade: "Average",
     condition: "Good",
@@ -31,39 +31,24 @@ function Predict({ onBack }) {
     setPrice(null);
 
     try {
-      const token = getToken();
-
-      if (!token) {
-        alert("You are not logged in. Please login again.");
-        setLoading(false);
-        return;
-      }
-
       const response = await axios.post(
         "http://127.0.0.1:5000/predict",
-        {
-          area: Number(formData.area),
-          bedrooms: Number(formData.bedrooms),
-          bathrooms: Number(formData.bathrooms),
-          floors: Number(formData.floors),
-          year_built: Number(formData.yearBuilt),
-          parking: Number(formData.parking),
-          grade: formData.grade,
-          condition: formData.condition,
-          waterfront: formData.waterfront,
-          renovated: formData.renovated,
-        },
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
-      setPrice(response.data.predicted_price);
+      if (response.data.predicted_price) {
+        setPrice(response.data.predicted_price);
+      }
     } catch (error) {
       console.error(error);
-      alert("Prediction failed. Make sure backend is running.");
+      alert(
+        "Prediction failed. Make sure backend is running and all inputs are correct."
+      );
     }
 
     setLoading(false);
@@ -78,7 +63,6 @@ function Predict({ onBack }) {
       <h1>🏠 House Price Prediction</h1>
 
       <h2>🏡 Property Details</h2>
-
       <div className="form-grid">
         <div className="form-group">
           <label>Living Area (sq ft)</label>
@@ -124,8 +108,8 @@ function Predict({ onBack }) {
           <label>Year Built</label>
           <input
             type="number"
-            name="yearBuilt"
-            value={formData.yearBuilt}
+            name="year_built"
+            value={formData.year_built}
             onChange={handleChange}
           />
         </div>
@@ -142,7 +126,6 @@ function Predict({ onBack }) {
       </div>
 
       <h2>⭐ House Quality</h2>
-
       <div className="form-grid">
         <div className="form-group">
           <label>Overall Grade</label>

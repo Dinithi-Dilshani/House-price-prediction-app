@@ -1,13 +1,12 @@
 import React from "react";
-import { logout } from "../auth";
 import "../styles/Dashboard.css";
-
 
 function Dashboard({ onNavigate, onLogout }) {
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
         <h1>🏠 House Price Predictor</h1>
+
         <p className="dashboard-text">
           Welcome! This application helps you estimate house prices based on
           property details and house quality factors.
@@ -18,10 +17,10 @@ function Dashboard({ onNavigate, onLogout }) {
             Go to Prediction
           </button>
 
-          <button className="logout-btn" onClick={() => {
-            logout();
-            onLogout();
-          }}>
+          <button
+            className="logout-btn"
+            onClick={onLogout}
+          >
             Logout
           </button>
         </div>

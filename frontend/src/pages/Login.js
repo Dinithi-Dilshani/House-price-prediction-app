@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../styles/Login.css";
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -11,23 +12,15 @@ function Login({ onLogin }) {
     setError("");
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:5000/login",
-        {
-          email: email,
-          password: password,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await axios.post("http://127.0.0.1:5000/login", {
+        email,
+        password,
+      });
 
       if (res.data.success) {
         onLogin();
-      } else {
-        setError("Invalid email or password");
       }
-    } catch (err) {
+    } catch {
       setError("Invalid email or password");
     }
   };
@@ -43,7 +36,6 @@ function Login({ onLogin }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <br /><br />
 
         <input
           type="password"
@@ -51,14 +43,16 @@ function Login({ onLogin }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br /><br />
 
         <button type="submit">Login</button>
       </form>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <p>Demo login: <b>admin@example.com</b> / <b>admin123</b></p>
+      <p>
+        Demo login:<br />
+        <b>admin@example.com</b> / <b>admin123</b>
+      </p>
     </div>
   );
 }

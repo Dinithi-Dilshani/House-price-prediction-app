@@ -1,49 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Predict from "./pages/Predict";
 
-import { getToken, logout } from "./auth";
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentPage, setCurrentPage] = useState("dashboard");
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setCurrentPage("dashboard");
-  };
-
-  const handleLogout = () => {
-    logout();
-    setIsLoggedIn(false);
-    setCurrentPage("dashboard");
-  };
-
-  const handleNavigate = (page) => {
-    setCurrentPage(page);
-  };
+  const [page, setPage] = useState("dashboard");
 
   if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
   }
 
-  if (currentPage === "predict") {
-    return <Predict onBack={() => setCurrentPage("dashboard")} />;
+  if (page === "predict") {
+    return <Predict onBack={() => setPage("dashboard")} />;
   }
 
   return (
     <Dashboard
-      onNavigate={handleNavigate}
-      onLogout={handleLogout}
+      onNavigate={setPage}
+      onLogout={() => setIsLoggedIn(false)}
     />
   );
 }
