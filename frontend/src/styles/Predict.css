@@ -1,0 +1,117 @@
+/* ===== Page container ===== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* ===== Page Title ===== */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+/* ===== Section titles ===== */
+h2 {
+  font-size: 1.3rem;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== Grid layout for form ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+/* ===== Form fields ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #f1f1f1;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ===== Buttons ===== */
+.predict-btn,
+.back-btn {
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 12px;
+}
+
+.predict-btn {
+  background-color: #667eea;
+  color: #fff;
+  width: 220px;
+}
+
+.predict-btn:hover {
+  background-color: #5a6fdc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.35);
+}
+
+.back-btn {
+  background-color: #f1f1f1;
+  color: #333;
+  align-self: flex-start;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+/* ===== Result display ===== */
+.result {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffd166;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 480px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .predict-btn {
+    width: 100%;
+  }
+}

@@ -1,3 +1,28 @@
+FEATURE_COLUMNS = [
+    'number of bedrooms',
+    'number of bathrooms',
+    'living area',
+    'lot area',
+    'number of floors',
+    'waterfront present',
+    'condition of the house',
+    'grade of the house',
+    'Built Year',
+    'Postal Code',
+
+    # Auto-filled / derived
+    'number of views',
+    'Area of the house(excluding basement)',
+    'Area of the basement',
+    'Renovation Year',
+    'Lattitude',
+    'Longitude',
+    'living_area_renov',
+    'lot_area_renov',
+    'Number of schools nearby',
+    'Distance from the airport'
+]
+
 # backend/utils/preprocessing.py
 
 def build_full_input(user):

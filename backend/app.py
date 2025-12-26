@@ -1,66 +1,77 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pickle
-from utils.preprocessing import build_full_input
+import numpy as np
+
+from auth import login_user   # ✅ USE auth.py
 
 app = Flask(__name__)
 CORS(app)
 
-# -----------------------------
-# Load model and scaler
-# -----------------------------
+# ---------------- LOAD MODEL ----------------
 with open("models/best_house_price_model.pkl", "rb") as f:
     model = pickle.load(f)
 
 with open("models/scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
-# -----------------------------
-# Feature order (MUST match training)
-# -----------------------------
-FEATURE_COLUMNS = [
-    'number of bedrooms',
-    'number of bathrooms',
-    'living area',
-    'lot area',
-    'number of floors',
-    'waterfront present',
-    'number of views',
-    'condition of the house',
-    'grade of the house',
-    'Area of the house(excluding basement)',
-    'Area of the basement',
-    'Built Year',
-    'Renovation Year',
-    'Postal Code',
-    'Lattitude',
-    'Longitude',
-    'living_area_renov',
-    'lot_area_renov',
-    'Number of schools nearby',
-    'Distance from the airport'
-]
 
-# -----------------------------
-# Prediction endpoint
-# -----------------------------
-@app.route("/predict", methods=["POST"])
-def predict():
-    data = request.json   # data from React frontend
+# ---------------- LOGIN ----------------
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
 
-    # Build full 20-feature input
-    full_input = build_full_input(data)
+    email = data.get("email")
+    password = data.get("password")
 
-    # Convert to ordered list
-    features = [full_input[col] for col in FEATURE_COLUMNS]
+    token = login_user(email, password)
 
-    # Scale and predict
-    scaled_features = scaler.transform([features])
-    prediction = model.predict(scaled_features)[0]
+    if token:
+        return jsonify({
+            "success": True,
+            "token": token
+        }), 200
 
     return jsonify({
-        "predicted_price": round(float(prediction), 2)
-    })
+        "success": False,
+        "message": "Invalid credentials"
+    }), 401
+
+
+# ---------------- PREDICT ----------------
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        data = request.json
+
+        def yes_no(value):
+            return 1 if value == "Yes" else 0
+
+        features = [
+            float(data["area"]),
+            int(data["bedrooms"]),
+            int(data["bathrooms"]),
+            int(data["stories"]),
+            yes_no(data["mainroad"]),
+            yes_no(data["guestroom"]),
+            yes_no(data["basement"]),
+            yes_no(data["hotwaterheating"]),
+            yes_no(data["airconditioning"]),
+            int(data["parking"]),
+            yes_no(data["prefarea"]),
+        ]
+
+        features_array = np.array(features).reshape(1, -1)
+
+        scaled_features = scaler.transform(features_array)
+        prediction = model.predict(scaled_features)[0]
+
+        return jsonify({
+            "prediction": round(float(prediction), 2)
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
