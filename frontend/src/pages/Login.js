@@ -9,7 +9,6 @@ function Login({ onLogin }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const res = await axios.post("http://127.0.0.1:5000/login", {
@@ -20,15 +19,14 @@ function Login({ onLogin }) {
       if (res.data.success) {
         onLogin();
       }
-    } catch {
+    } catch (err) {
       setError("Invalid email or password");
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-
+    <div>
+      <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <input
           type="email"
@@ -36,23 +34,17 @@ function Login({ onLogin }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
+        <br /><br />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
+        <br /><br />
         <button type="submit">Login</button>
       </form>
-
       {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <p>
-        Demo login:<br />
-        <b>admin@example.com</b> / <b>admin123</b>
-      </p>
     </div>
   );
 }

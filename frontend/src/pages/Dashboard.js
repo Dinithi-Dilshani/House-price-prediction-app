@@ -6,7 +6,6 @@ function Dashboard({ onNavigate, onLogout }) {
     <div className="dashboard-container">
       <div className="dashboard-card">
         <h1>🏠 House Price Predictor</h1>
-
         <p className="dashboard-text">
           Welcome! This application helps you estimate house prices based on
           property details and house quality factors.
@@ -19,7 +18,9 @@ function Dashboard({ onNavigate, onLogout }) {
 
           <button
             className="logout-btn"
-            onClick={onLogout}
+            onClick={() => {
+              onLogout();
+            }}
           >
             Logout
           </button>

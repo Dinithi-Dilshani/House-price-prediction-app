@@ -13,7 +13,7 @@ with open("models/best_house_price_model.pkl", "rb") as f:
 with open("models/scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
-# ---------------- LOGIN (NO JWT) ----------------
+# ---------------- LOGIN ----------------
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
@@ -36,42 +36,35 @@ def predict():
         def yes_no(val):
             return 1 if val == "Yes" else 0
 
-        # Map categorical grades/conditions to numbers
-        grade_map = {
-            "Very Poor": 0,
-            "Poor": 1,
-            "Average": 2,
-            "Good": 3,
-            "Very Good": 4,
-            "Excellent": 5
-        }
-
-        condition_map = {
-            "Poor": 0,
-            "Fair": 1,
-            "Good": 2,
-            "Very Good": 3,
-            "Excellent": 4
-        }
-
-        # Build features array (10 features)
+        # Build the full 20-feature input
+        # Order MUST match the training data
         features = [
-            float(data["area"]),               # Living area
-            int(data["bedrooms"]),             # Bedrooms
-            int(data["bathrooms"]),            # Bathrooms
-            int(data["floors"]),               # Floors
-            int(data["year_built"]),           # Year built
-            int(data["parking"]),              # Parking
-            yes_no(data["waterfront"]),        # Waterfront
-            yes_no(data["renovated"]),         # Renovated
-            grade_map[data["grade"]],          # Grade
-            condition_map[data["condition"]],  # Condition
+            int(data.get("bedrooms", 0)),                 # 1. number of bedrooms
+            int(data.get("bathrooms", 0)),                # 2. number of bathrooms
+            float(data.get("area", 0)),                   # 3. living area
+            0,                                            # 4. lot area (dummy)
+            int(data.get("floors", 0)),                   # 5. number of floors
+            yes_no(data.get("waterfront", "No")),         # 6. waterfront present
+            0,                                            # 7. number of views (dummy)
+            data.get("condition_map", 2),                 # 8. condition of the house
+            0,                                            # 9. grade of the house (ignored)
+            0,                                            # 10. Area of the house(excluding basement) (dummy)
+            0,                                            # 11. Area of the basement (dummy)
+            int(data.get("yearBuilt", 0)),                # 12. Built Year
+            yes_no(data.get("renovated", "No")),          # 13. Renovation Year (Yes/No mapped to 0/1)
+            0,                                            # 14. Postal Code (dummy)
+            0,                                            # 15. Latitude (dummy)
+            0,                                            # 16. Longitude (dummy)
+            0,                                            # 17. living_area_renov (dummy)
+            0,                                            # 18. lot_area_renov (dummy)
+            0,                                            # 19. Number of schools nearby (dummy)
+            0                                             # 20. Distance from airport (dummy)
         ]
 
-        features = np.array(features).reshape(1, -1)
+        features_array = np.array(features).reshape(1, -1)
 
         # Scale and predict
-        scaled_features = scaler.transform(features)
+        scaled_features = scaler.transform(features_array)
         price = model.predict(scaled_features)[0]
 
         return jsonify({"predicted_price": round(float(price), 2)})
