@@ -25,28 +25,36 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+  <div className="login-page">
+    <div className="login-box">
+      <h2>Login</h2>
+
       <form onSubmit={handleLogin}>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
-        <br /><br />
+
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <br /><br />
+
         <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <h5>admin@example.com/admin123</h5>
+
+      {error && <p className="error-text">{error}</p>}
     </div>
-  );
+  </div>
+);
+
 }
 
 export default Login;

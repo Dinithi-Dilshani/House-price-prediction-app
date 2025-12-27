@@ -1,87 +1,76 @@
-/* ===== Page background ===== */
+/* Dashboard.css */
+
+/* Full page background */
 .dashboard-container {
   min-height: 100vh;
+  background-image: url("../assets/bgimage2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  padding: 20px;
 }
 
-/* ===== Dashboard card ===== */
+/* Center card */
 .dashboard-card {
-  background: #ffffff;
-  width: 100%;
-  max-width: 520px;
-  padding: 36px 32px;
-  border-radius: 18px;
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 50px;
+  width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-/* ===== Title ===== */
+/* Title */
 .dashboard-card h1 {
-  font-size: 2rem;
-  margin-bottom: 14px;
-  color: #333;
+  margin-bottom: 15px;
+  color: #2a2f36;
 }
 
-/* ===== Description text ===== */
+/* Description */
 .dashboard-text {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 28px;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 30px;
 }
 
-/* ===== Buttons container ===== */
+/* Button container */
 .dashboard-actions {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  gap: 15px;
+  justify-content: center;
 }
 
-/* ===== Main action button ===== */
+/* Buttons */
 .dashboard-actions button {
-  padding: 14px;
-  border-radius: 12px;
+  padding: 10px 18px;
   border: none;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
-  background: #667eea;
-  color: #fff;
-  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.dashboard-actions button:hover {
-  background: #5a6fdc;
+/* Prediction button */
+.dashboard-actions button:first-child {
+  background-color: #4cd137;
+  color: white;
+}
+
+.dashboard-actions button:first-child:hover {
+  background-color: #44bd32;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
 }
 
-.dashboard-actions button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* ===== Logout button ===== */
+/* Logout button */
 .logout-btn {
-  background: #e63946 !important;
+  background-color: #e84118;
+  color: white;
 }
 
 .logout-btn:hover {
-  background: #d62839 !important;
-  box-shadow: 0 8px 20px rgba(230, 57, 70, 0.35) !important;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 480px) {
-  .dashboard-card {
-    padding: 28px 22px;
-  }
-
-  .dashboard-card h1 {
-    font-size: 1.6rem;
-  }
+  background-color: #c23616;
+  transform: translateY(-2px);
 }
