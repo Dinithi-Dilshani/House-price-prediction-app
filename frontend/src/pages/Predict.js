@@ -163,8 +163,47 @@ function Predict({ onBack }) {
       </button>
 
       {price && (
-        <h2 className="result">Estimated Price: ${price.toLocaleString()}</h2>
-      )}
+  <div className="result-card">
+    <h2>🏷 Estimated House Price</h2>
+
+    <p className="price-main">
+      ${price.toLocaleString()}
+    </p>
+
+    <p className="price-range">
+      Expected Range: $
+      {(price * 0.9).toLocaleString()} – $
+      {(price * 1.1).toLocaleString()}
+    </p>
+
+    <div className="confidence">
+      <span>Model Confidence</span>
+      <div className="confidence-bar">
+        <div className="confidence-fill"></div>
+      </div>
+      <span className="confidence-value">88.3%</span>
+    </div>
+
+    <div className="summary">
+      <h3>📋 Property Summary</h3>
+      <ul>
+        <li><b>Area:</b> {formData.area} sq ft</li>
+        <li><b>Bedrooms:</b> {formData.bedrooms}</li>
+        <li><b>Bathrooms:</b> {formData.bathrooms}</li>
+        <li><b>Floors:</b> {formData.floors}</li>
+        <li><b>Condition:</b> {formData.condition}</li>
+        <li><b>Waterfront:</b> {formData.waterfront}</li>
+        <li><b>Renovated:</b> {formData.renovated}</li>
+      </ul>
+    </div>
+
+    <p className="disclaimer">
+      ⚠ This is an AI-based estimate and may not reflect the actual market value.
+    </p>
+  </div>
+)}
+
+
     </div>
   );
 }

@@ -19,7 +19,7 @@
   padding: 50px;
   width: 450px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -39,7 +39,7 @@
 /* Button container */
 .dashboard-actions {
   display: flex;
-  gap: 15px;
+  gap: 50px;
   justify-content: center;
 }
 
